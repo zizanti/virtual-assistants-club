@@ -1,6 +1,6 @@
 'use client'
 
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts'
+import { PieChart, Pie, Cell, Tooltip } from 'recharts'
 import { TRAFFIC_SOURCES } from '@/lib/data'
 
 function CustomTooltip({ active, payload }: any) {
@@ -20,8 +20,7 @@ export function TrafficSourcesChart() {
       <p className="text-xs text-muted-foreground mb-5">Where candidates discover VAC</p>
 
       <div className="flex items-center gap-6">
-        <ResponsiveContainer width={120} height={120}>
-          <PieChart>
+        <PieChart width={120} height={120}>
             <Pie
               data={TRAFFIC_SOURCES}
               cx="50%"
@@ -38,7 +37,6 @@ export function TrafficSourcesChart() {
             </Pie>
             <Tooltip content={<CustomTooltip />} />
           </PieChart>
-        </ResponsiveContainer>
 
         <div className="flex-1 space-y-2.5">
           {TRAFFIC_SOURCES.map((source) => (
