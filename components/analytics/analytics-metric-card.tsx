@@ -21,10 +21,14 @@ function useCountUp(target: number, duration = 1400, decimals = 0) {
   const [count, setCount] = useState(0)
   const frameRef = useRef<number>(0)
   const startRef = useRef<number | null>(null)
+  const mountedRef = useRef(true)
 
   useEffect(() => {
+    mountedRef.current = true
     startRef.current = null
+
     const animate = (ts: number) => {
+      if (!mountedRef.current) return
       if (!startRef.current) startRef.current = ts
       const progress = Math.min((ts - startRef.current) / duration, 1)
       const eased = 1 - Math.pow(1 - progress, 3)
@@ -32,7 +36,11 @@ function useCountUp(target: number, duration = 1400, decimals = 0) {
       if (progress < 1) frameRef.current = requestAnimationFrame(animate)
     }
     frameRef.current = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(frameRef.current)
+
+    return () => {
+      mountedRef.current = false
+      cancelAnimationFrame(frameRef.current)
+    }
   }, [target, duration, decimals])
 
   return count
