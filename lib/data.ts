@@ -405,3 +405,43 @@ export const TRAFFIC_SOURCES = [
   { name: 'TikTok', value: 18, color: '#E8650A' },
   { name: 'Google', value: 12, color: '#4285F4' },
 ]
+
+// ─── Analytics page data ────────────────────────────────────────────────────
+
+export const MONTHLY_APPLICATIONS = [
+  { month: 'Aug', applications: 84, hires: 14 },
+  { month: 'Sep', applications: 117, hires: 21 },
+  { month: 'Oct', applications: 143, hires: 28 },
+  { month: 'Nov', applications: 162, hires: 31 },
+  { month: 'Dec', applications: 138, hires: 24 },
+  { month: 'Jan', applications: 201, hires: 42 },
+]
+
+export const PLACEMENT_RATE_TREND = [
+  { month: 'Aug', rate: 16.7 },
+  { month: 'Sep', rate: 17.9 },
+  { month: 'Oct', rate: 19.6 },
+  { month: 'Nov', rate: 19.1 },
+  { month: 'Dec', rate: 17.4 },
+  { month: 'Jan', rate: 20.9 },
+]
+
+export const JOB_CATEGORIES = [
+  { category: 'Executive Assistant', placements: 98, fill: '#D4A843' },
+  { category: 'Chief of Staff EA',   placements: 72, fill: '#E8650A' },
+  { category: 'Operations EA',       placements: 61, fill: '#C49535' },
+  { category: 'Marketing VA',        placements: 47, fill: '#F07832' },
+  { category: 'Bilingual EA',        placements: 39, fill: '#8B7355' },
+  { category: 'Admin VA',            placements: 28, fill: '#6B6459' },
+]
+
+export const TOP_COMPANIES_BY_HIRES = [
+  { company: 'Accenture',      initials: 'AC', color: '#A100FF', hires: 18, avgDays: 9,  revenue: '$54,000' },
+  { company: 'Stripe',         initials: 'ST', color: '#635BFF', hires: 15, avgDays: 11, revenue: '$45,000' },
+  { company: 'OpenAI',         initials: 'OA', color: '#10A37F', hires: 14, avgDays: 8,  revenue: '$63,000' },
+  { company: 'Sequoia Capital', initials: 'SQ', color: '#D4A843', hires: 12, avgDays: 12, revenue: '$57,600' },
+  { company: 'HubSpot',        initials: 'HS', color: '#FF7A59', hires: 10, avgDays: 14, revenue: '$27,000' },
+  { company: 'Notion',         initials: 'NO', color: '#555555', hires: 9,  avgDays: 10, revenue: '$31,500' },
+  { company: 'Brex',           initials: 'BR', color: '#7C3AED', hires: 7,  avgDays: 13, revenue: '$28,700' },
+  { company: 'Figma',          initials: 'FG', color: '#F24E1E', hires: 6,  avgDays: 15, revenue: '$29,400' },
+]
