@@ -1,11 +1,45 @@
 'use client'
 
-import { Bell, Search, Plus, ExternalLink } from 'lucide-react'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { Bell, Search, Plus, ExternalLink, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 export function DashboardTopBar() {
+  const router = useRouter()
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true)
+    try {
+      // Sign out from Supabase
+      await supabase.auth.signOut()
+      
+      // Clear cookies via API
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+      })
+      
+      // Redirect to login
+      router.push('/login')
+    } catch (err) {
+      console.error('Logout error:', err)
+      // Still redirect even if there's an error
+      router.push('/login')
+    } finally {
+      setIsLoggingOut(false)
+    }
+  }
+
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b border-border bg-[#0A0A0A]/95 backdrop-blur-md px-6">
       {/* Search */}
@@ -19,10 +53,12 @@ export function DashboardTopBar() {
 
       {/* Actions */}
       <div className="flex items-center gap-3">
-        <Button size="sm" className="h-9 gap-1.5 bg-[#E8650A] hover:bg-[#E8650A]/90 text-white font-semibold rounded-xl">
-          <Plus size={15} />
-          Add Job
-        </Button>
+        <Link href="/dashboard/jobs">
+          <Button size="sm" className="h-9 gap-1.5 bg-[#E8650A] hover:bg-[#E8650A]/90 text-white font-semibold rounded-xl">
+            <Plus size={15} />
+            Add Job
+          </Button>
+        </Link>
 
         {/* Notifications */}
         <button className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground hover:text-foreground hover:border-gold/30 transition-colors">
@@ -32,16 +68,30 @@ export function DashboardTopBar() {
           </span>
         </button>
 
-        {/* Avatar */}
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold text-[#0A0A0A] font-bold text-sm cursor-pointer">
-            S
-          </div>
-          <div className="hidden md:block">
-            <p className="text-xs font-medium text-foreground leading-tight">Santi</p>
-            <p className="text-[10px] text-muted-foreground leading-tight">Admin</p>
-          </div>
-        </div>
+        {/* Avatar with Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="flex items-center gap-2.5 cursor-pointer hover:opacity-80 transition-opacity">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold text-[#0A0A0A] font-bold text-sm">
+                S
+              </div>
+              <div className="hidden md:block">
+                <p className="text-xs font-medium text-foreground leading-tight">Santi</p>
+                <p className="text-[10px] text-muted-foreground leading-tight">Admin</p>
+              </div>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              className="cursor-pointer flex gap-2 text-red-500 hover:bg-red-500/10"
+            >
+              <LogOut size={14} />
+              {isLoggingOut ? 'Signing out...' : 'Sign out'}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         {/* View Site */}
         <Link href="/">

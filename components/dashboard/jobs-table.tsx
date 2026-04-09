@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Pencil,
   Trash2,
@@ -13,7 +13,6 @@ import {
   X,
   ArrowUpDown,
 } from 'lucide-react'
-import { JOBS } from '@/lib/data'
 import type { Job, JobStatus } from '@/lib/data'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -58,13 +57,42 @@ const TYPE_STYLES: Record<string, string> = {
 }
 
 export function JobsTable() {
-  const [jobs, setJobs] = useState<Job[]>(JOBS)
+  const [jobs, setJobs] = useState<Job[]>([])
   const [activeTab, setActiveTab] = useState<Tab>('all')
   const [search, setSearch] = useState('')
   const [deleteJob, setDeleteJob] = useState<Job | null>(null)
   const [viewJob, setViewJob] = useState<Job | null>(null)
   const [sortField, setSortField] = useState<SortField>('postedDate')
   const [sortDir, setSortDir] = useState<SortDir>('desc')
+  const [isLoading, setIsLoading] = useState(true)
+  const [createOpen, setCreateOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formTitle, setFormTitle] = useState('')
+  const [formCompany, setFormCompany] = useState('')
+  const [formSalary, setFormSalary] = useState('')
+  const [formType, setFormType] = useState('Full-time')
+  const [formDescription, setFormDescription] = useState('')
+
+  useEffect(() => {
+    const loadJobs = async () => {
+      setIsLoading(true)
+      try {
+        const response = await fetch('/api/dashboard/jobs')
+        if (!response.ok) {
+          throw new Error('Unable to load jobs')
+        }
+        const data = await response.json()
+        setJobs(data.map((job: any, index: number) => normalizeJob(job, index)))
+      } catch (error) {
+        console.error(error)
+        toast.error('Failed to load jobs')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadJobs()
+  }, [])
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -75,13 +103,73 @@ export function JobsTable() {
     }
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!deleteJob) return
-    setJobs((prev) => prev.filter((j) => j.id !== deleteJob.id))
-    toast.error(`"${deleteJob.title}" deleted`, {
-      description: 'The job listing has been permanently removed.',
-    })
-    setDeleteJob(null)
+
+    try {
+      const response = await fetch(`/api/dashboard/jobs/${deleteJob.id}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        throw new Error('Delete failed')
+      }
+
+      setJobs((prev) => prev.filter((j) => j.id !== deleteJob.id))
+      toast.error(`"${deleteJob.title}" deleted`, {
+        description: 'The job listing has been permanently removed.',
+      })
+      setDeleteJob(null)
+    } catch (error) {
+      console.error(error)
+      toast.error('Failed to delete job')
+    }
+  }
+
+  const handleCreateJob = async (event: React.FormEvent) => {
+    event.preventDefault()
+
+    if (!formTitle.trim() || !formCompany.trim() || !formSalary.trim() || !formDescription.trim()) {
+      toast.error('Please complete all fields')
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch('/api/dashboard/jobs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: formTitle,
+          company: formCompany,
+          salary: formSalary,
+          type: formType,
+          description: formDescription,
+        }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Failed to create job')
+      }
+
+      const data = await response.json()
+      const newJob = normalizeJob(data.job ?? data, jobs.length)
+      setJobs((prev) => [newJob, ...prev])
+      setCreateOpen(false)
+      setFormTitle('')
+      setFormCompany('')
+      setFormSalary('')
+      setFormType('Full-time')
+      setFormDescription('')
+      toast.success('Job created successfully')
+    } catch (error: any) {
+      console.error(error)
+      toast.error(error?.message || 'Failed to create job')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleStatusChange = (job: Job, newStatus: JobStatus) => {
@@ -128,6 +216,7 @@ export function JobsTable() {
             <Button
               size="sm"
               className="h-9 gap-1.5 bg-[#E8650A] hover:bg-[#E8650A]/90 text-white font-semibold rounded-xl flex-shrink-0"
+              onClick={() => setCreateOpen(true)}
             >
               <Plus size={14} />
               New Listing
@@ -177,12 +266,16 @@ export function JobsTable() {
         {/* Divider */}
         <div className="h-px bg-border" />
 
-        {/* Table */}
-        {filtered.length === 0 ? (
-          <EmptyState search={search} tab={activeTab} />
+        {isLoading ? (
+          <div className="py-20 text-center text-sm text-muted-foreground">Loading job listings…</div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+          <>
+            {/* Table */}
+        {filtered.length === 0 ? (
+            <EmptyState search={search} tab={activeTab} />
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border bg-secondary/50">
                   <SortHeader
@@ -243,6 +336,86 @@ export function JobsTable() {
           </div>
         )}
       </div>
+
+      {/* Create Job Modal */}
+      <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+        <DialogContent className="bg-card border-border text-foreground max-w-xl">
+          <DialogHeader>
+            <DialogTitle className="font-serif text-base">Create New Job</DialogTitle>
+            <DialogDescription className="text-muted-foreground text-sm">
+              Add a new job listing that will appear in the dashboard and can also be managed later.
+            </DialogDescription>
+          </DialogHeader>
+
+          <form onSubmit={handleCreateJob} className="space-y-4 py-2">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label className="text-sm text-muted-foreground mb-2 block">Title</label>
+                <Input
+                  value={formTitle}
+                  onChange={(e) => setFormTitle(e.target.value)}
+                  placeholder="Executive Assistant to CEO"
+                  className="bg-secondary border-border"
+                />
+              </div>
+              <div>
+                <label className="text-sm text-muted-foreground mb-2 block">Company</label>
+                <Input
+                  value={formCompany}
+                  onChange={(e) => setFormCompany(e.target.value)}
+                  placeholder="Acme Inc."
+                  className="bg-secondary border-border"
+                />
+              </div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label className="text-sm text-muted-foreground mb-2 block">Salary</label>
+                <Input
+                  value={formSalary}
+                  onChange={(e) => setFormSalary(e.target.value)}
+                  placeholder="$4,000 – $6,000/mo"
+                  className="bg-secondary border-border"
+                />
+              </div>
+              <div>
+                <label className="text-sm text-muted-foreground mb-2 block">Type</label>
+                <select
+                  value={formType}
+                  onChange={(e) => setFormType(e.target.value)}
+                  className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm text-foreground outline-none"
+                >
+                  {['Full-time', 'Part-time', 'Contract'].map((option) => (
+                    <option key={option} value={option} className="bg-[#0A0A0A] text-foreground">
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm text-muted-foreground mb-2 block">Description</label>
+              <textarea
+                value={formDescription}
+                onChange={(e) => setFormDescription(e.target.value)}
+                placeholder="Write a short description for the job..."
+                className="w-full min-h-[120px] rounded-2xl border border-border bg-secondary px-4 py-3 text-sm text-foreground outline-none resize-none"
+              />
+            </div>
+
+            <DialogFooter className="items-center gap-2">
+              <Button variant="outline" size="sm" className="border-border rounded-xl" onClick={() => setCreateOpen(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" size="sm" className="bg-[#E8650A] hover:bg-[#E8650A]/90 text-white font-semibold rounded-xl" disabled={isSubmitting}>
+                {isSubmitting ? 'Creating…' : 'Create Job'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       {/* Delete Confirm Modal */}
       <Dialog open={!!deleteJob} onOpenChange={() => setDeleteJob(null)}>
@@ -362,6 +535,76 @@ export function JobsTable() {
       </Dialog>
     </>
   )
+}
+
+function normalizeJob(row: any, index: number): Job {
+  const title = row.title ?? 'Untitled role'
+  const company = row.company ?? 'Unknown company'
+  const salary = row.salary ?? '$0/mo'
+  const type = row.type ?? 'Full-time'
+  const createdAt = row.created_at ?? row.createdAt ?? row.postedDate ?? new Date().toISOString()
+  const companyInitials = row.companyInitials ?? row.company_initials ?? getInitials(company)
+  const companyColor = row.companyColor ?? row.company_color ?? getCompanyColor(company)
+
+  return {
+    id: String(row.id ?? row.job_id ?? index),
+    title,
+    company,
+    companyInitials,
+    companyColor,
+    salary,
+    salaryMin: Number(row.salaryMin ?? row.salary_min ?? parseSalaryMin(salary) ?? 0),
+    salaryMax: Number(row.salaryMax ?? row.salary_max ?? parseSalaryMax(salary) ?? 0),
+    skills: Array.isArray(row.skills)
+      ? row.skills
+      : typeof row.skills === 'string'
+      ? row.skills.split(',').map((item: string) => item.trim())
+      : [],
+    location: row.location ?? row.city ?? 'Remote',
+    postedDate: new Date(createdAt).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    }),
+    daysAgo: dateDaysAgo(createdAt),
+    type,
+    featured: Boolean(row.featured),
+    status: (row.status ?? 'active') as JobStatus,
+    description: row.description ?? row.job_description ?? '',
+    experience: row.experience ?? row.years_experience ?? '',
+  }
+}
+
+function getInitials(company: string) {
+  const words = company.trim().split(/\s+/)
+  return words.length > 1
+    ? (words[0][0] + words[1][0]).toUpperCase()
+    : company.slice(0, 2).toUpperCase()
+}
+
+function getCompanyColor(company: string) {
+  const hash = company
+    .split('')
+    .reduce((acc, char) => char.charCodeAt(0) + ((acc << 5) - acc), 0)
+  return `hsl(${hash % 360}, 70%, 45%)`
+}
+
+function parseSalaryMin(salary: string) {
+  const match = salary.match(/\$([\d,]+)(?:\s*–\s*\$?([\d,]+))?/) 
+  if (!match) return 0
+  return Number(match[1].replace(/,/g, ''))
+}
+
+function parseSalaryMax(salary: string) {
+  const match = salary.match(/\$([\d,]+)(?:\s*–\s*\$?([\d,]+))?/) 
+  if (!match) return 0
+  return match[2] ? Number(match[2].replace(/,/g, '')) : Number(match[1].replace(/,/g, ''))
+}
+
+function dateDaysAgo(value: string) {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return 0
+  return Math.max(0, Math.round((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24)))
 }
 
 // ─── Sub-components ──────────────────────────────────────────────────────────

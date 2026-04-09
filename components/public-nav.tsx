@@ -31,6 +31,12 @@ export function PublicNav() {
                 {item}
               </Link>
             ))}
+            <Link
+              href="/login"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Admin
+            </Link>
           </nav>
 
           {/* CTA */}
@@ -48,11 +54,6 @@ export function PublicNav() {
             >
               Apply as VA
             </Button>
-            <Link href="/dashboard">
-              <Button size="sm" variant="outline" className="border-border text-muted-foreground hover:text-foreground">
-                Dashboard
-              </Button>
-            </Link>
           </div>
 
           {/* Mobile Menu */}
@@ -79,6 +80,13 @@ export function PublicNav() {
                   {item}
                 </Link>
               ))}
+              <Link
+                href="/login"
+                className="text-sm text-muted-foreground hover:text-foreground px-1"
+                onClick={() => setOpen(false)}
+              >
+                Admin
+              </Link>
               <Button size="sm" className="bg-gold text-[#0A0A0A] hover:bg-gold/90 font-semibold mt-2">
                 Apply as VA
               </Button>
