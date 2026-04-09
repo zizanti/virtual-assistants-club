@@ -271,69 +271,71 @@ export function JobsTable() {
         ) : (
           <>
             {/* Table */}
-        {filtered.length === 0 ? (
-            <EmptyState search={search} tab={activeTab} />
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border bg-secondary/50">
-                  <SortHeader
-                    label="Job Title"
-                    field="title"
-                    active={sortField === 'title'}
-                    dir={sortDir}
-                    onSort={handleSort}
-                    className="pl-5 w-[280px]"
-                  />
-                  <SortHeader
-                    label="Company"
-                    field="company"
-                    active={sortField === 'company'}
-                    dir={sortDir}
-                    onSort={handleSort}
-                  />
-                  <SortHeader
-                    label="Salary Range"
-                    field="salaryMin"
-                    active={sortField === 'salaryMin'}
-                    dir={sortDir}
-                    onSort={handleSort}
-                    className="hidden lg:table-cell"
-                  />
-                  <th className="text-left text-[11px] text-muted-foreground font-medium px-4 py-3 hidden md:table-cell">
-                    Type
-                  </th>
-                  <th className="text-left text-[11px] text-muted-foreground font-medium px-4 py-3">
-                    Status
-                  </th>
-                  <SortHeader
-                    label="Posted"
-                    field="postedDate"
-                    active={sortField === 'postedDate'}
-                    dir={sortDir}
-                    onSort={handleSort}
-                    className="hidden lg:table-cell"
-                  />
-                  <th className="text-right text-[11px] text-muted-foreground font-medium px-5 py-3">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((job, i) => (
-                  <JobRow
-                    key={job.id}
-                    job={job}
-                    isLast={i === filtered.length - 1}
-                    onView={() => setViewJob(job)}
-                    onDelete={() => setDeleteJob(job)}
-                    onStatusChange={handleStatusChange}
-                  />
-                ))}
-              </tbody>
-            </table>
-          </div>
+            {filtered.length === 0 ? (
+              <EmptyState search={search} tab={activeTab} />
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border bg-secondary/50">
+                      <SortHeader
+                        label="Job Title"
+                        field="title"
+                        active={sortField === 'title'}
+                        dir={sortDir}
+                        onSort={handleSort}
+                        className="pl-5 w-[280px]"
+                      />
+                      <SortHeader
+                        label="Company"
+                        field="company"
+                        active={sortField === 'company'}
+                        dir={sortDir}
+                        onSort={handleSort}
+                      />
+                      <SortHeader
+                        label="Salary Range"
+                        field="salaryMin"
+                        active={sortField === 'salaryMin'}
+                        dir={sortDir}
+                        onSort={handleSort}
+                        className="hidden lg:table-cell"
+                      />
+                      <th className="text-left text-[11px] text-muted-foreground font-medium px-4 py-3 hidden md:table-cell">
+                        Type
+                      </th>
+                      <th className="text-left text-[11px] text-muted-foreground font-medium px-4 py-3">
+                        Status
+                      </th>
+                      <SortHeader
+                        label="Posted"
+                        field="postedDate"
+                        active={sortField === 'postedDate'}
+                        dir={sortDir}
+                        onSort={handleSort}
+                        className="hidden lg:table-cell"
+                      />
+                      <th className="text-right text-[11px] text-muted-foreground font-medium px-5 py-3">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filtered.map((job, i) => (
+                      <JobRow
+                        key={job.id}
+                        job={job}
+                        isLast={i === filtered.length - 1}
+                        onView={() => setViewJob(job)}
+                        onDelete={() => setDeleteJob(job)}
+                        onStatusChange={handleStatusChange}
+                      />
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </>
         )}
       </div>
 
