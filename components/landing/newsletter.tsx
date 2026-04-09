@@ -15,12 +15,45 @@ const PERKS = [
 
 export function Newsletter() {
   const [email, setEmail] = useState('')
-  const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!email) return
-    setSubmitted(true)
+    if (!email.trim()) return
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address.')
+      return
+    }
+
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      if (response.ok) {
+        setSuccess(true)
+        setEmail('')
+      } else {
+        const data = await response.json()
+        setError(data.error || 'Something went wrong. Please try again.')
+      }
+    } catch (err) {
+      setError('Network error. Please check your connection and try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -73,14 +106,14 @@ export function Newsletter() {
               ))}
             </ul>
 
-            {/* Form */}
-            {submitted ? (
+            {/* Form or Success */}
+            {success ? (
               <div className="flex flex-col items-center gap-3 py-4">
                 <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gold/10 border border-gold/30">
                   <CheckCircle2 size={28} className="text-gold" />
                 </div>
                 <p className="font-semibold text-foreground text-lg">You&apos;re in!</p>
-                <p className="text-sm text-muted-foreground">Check your inbox — first issue lands Monday.</p>
+                <p className="text-sm text-muted-foreground">Check your email soon.</p>
               </div>
             ) : (
               <form
@@ -96,16 +129,22 @@ export function Newsletter() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     className="pl-9 h-11 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-gold/50 focus-visible:border-gold/40"
+                    disabled={loading}
                   />
                 </div>
                 <Button
                   type="submit"
-                  className="h-11 px-6 bg-gold text-[#0A0A0A] hover:bg-gold/90 font-semibold shrink-0"
+                  disabled={loading}
+                  className="h-11 px-6 bg-gold text-[#0A0A0A] hover:bg-gold/90 font-semibold shrink-0 disabled:opacity-50"
                 >
-                  Subscribe
-                  <ArrowRight size={14} className="ml-2" />
+                  {loading ? 'Subscribing...' : 'Subscribe'}
+                  {!loading && <ArrowRight size={14} className="ml-2" />}
                 </Button>
               </form>
+            )}
+
+            {error && (
+              <p className="text-sm text-red-400 mt-3">{error}</p>
             )}
 
             <p className="text-xs text-muted-foreground mt-5">

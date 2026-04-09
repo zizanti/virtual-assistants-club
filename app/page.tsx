@@ -6,6 +6,7 @@ import { JobCard } from '@/components/job-card'
 import { FilterBar } from '@/components/filter-bar'
 import { Hero } from '@/components/hero'
 import { PublicNav } from '@/components/public-nav'
+import { Newsletter } from '@/components/landing/newsletter'
 
 export default function JobBoardPage() {
   const [search, setSearch] = useState('')
@@ -82,6 +83,8 @@ export default function JobBoardPage() {
           )}
         </div>
       </section>
+
+      <Newsletter />
 
       {/* Footer */}
       <footer className="border-t border-border py-10">
