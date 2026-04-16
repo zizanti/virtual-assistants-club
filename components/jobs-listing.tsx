@@ -160,22 +160,22 @@ export function JobsListing({ jobs }: { jobs: Job[] }) {
         </div>
       </div>
 
-        {filteredJobs.length === 0 ? (
-          <div className="rounded-[32px] border border-border bg-card p-14 text-center">
-            <p className="text-4xl">😔</p>
-            <h2 className="mt-4 text-2xl font-semibold text-foreground">No jobs match your search</h2>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground max-w-xl mx-auto">
-              Try adjusting your search or filters to discover more remote roles.
-            </p>
-          </div>
-        ) : (
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {filteredJobs.map((job) => (
-              <JobCard key={job.id} job={job} />
-            ))}
-          </div>
-        )}
-      </div>
+      {filteredJobs.length === 0 ? (
+        <div className="rounded-[32px] border border-border bg-card p-14 text-center">
+          <p className="text-4xl">😔</p>
+          <h2 className="mt-4 text-2xl font-semibold text-foreground">No jobs match your search</h2>
+          <p className="mt-2 text-sm leading-6 text-muted-foreground max-w-xl mx-auto">
+            Try adjusting your search or filters to discover more remote roles.
+          </p>
+        </div>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {filteredJobs.map((job) => (
+            <JobCard key={job.id} job={job} />
+          ))}
+        </div>
+      )}
     </div>
+  )
   )
 }
