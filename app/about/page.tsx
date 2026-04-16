@@ -17,24 +17,30 @@ export default function AboutPage() {
             </h1>
           </div>
 
-          {/* Problem Statement */}
           <div className="mb-16">
             <div className="rounded-[32px] border border-border bg-card p-8 shadow-xl shadow-black/10">
               <p className="text-lg text-muted-foreground leading-relaxed">
-                VAC was built to solve a simple problem: There is a massive gap between talented people in LATAM and companies in the US that need support.
+                VAC was built to solve a real problem:
+                <br />
+                There is a gap between talented people in LATAM and companies in the US that need reliable support.
               </p>
             </div>
           </div>
 
-          {/* Founder Story */}
           <div className="mb-16">
             <h2 className="text-2xl font-semibold text-foreground mb-6">Founder Story</h2>
             <div className="prose prose-invert max-w-none">
               <p className="text-muted-foreground leading-relaxed mb-6">
-                Built by a Senior Executive Assistant based in Colombia, after years of working with US founders and teams.
+                Built by a Senior Executive Assistant based in Colombia.
+              </p>
+              <p className="text-muted-foreground leading-relaxed mb-6">
+                With years of experience working remotely with US founders and teams, I understand both sides: what companies actually expect and what candidates are missing.
+              </p>
+              <p className="text-muted-foreground leading-relaxed mb-6">
+                Beyond execution, I bring a strong foundation in communication, having studied and graduated in Languages and Marketing.
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                Understanding both sides: What companies actually need. What candidates are missing.
+                This allows me to bridge not just skill gaps, but also communication and expectation gaps between LATAM talent and US companies.
               </p>
             </div>
           </div>
@@ -60,10 +66,9 @@ export default function AboutPage() {
             </div>
           </div>
 
-          {/* Closing */}
           <div className="text-center">
             <p className="text-muted-foreground">
-              VAC is designed to bridge that gap.
+              VAC exists to create better alignment, better opportunities, and better outcomes for both sides.
             </p>
           </div>
         </div>

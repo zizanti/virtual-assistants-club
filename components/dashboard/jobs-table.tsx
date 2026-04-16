@@ -129,10 +129,12 @@ export function JobsTable() {
   const handleCreateJob = async (event: React.FormEvent) => {
     event.preventDefault()
 
-    if (!formTitle.trim() || !formCompany.trim() || !formSalary.trim() || !formDescription.trim()) {
-      toast.error('Please complete all fields')
+    if (!formTitle.trim() || !formSalary.trim() || !formDescription.trim()) {
+      toast.error('Please complete all required fields')
       return
     }
+
+    const company = formCompany.trim() || 'Confidential'
 
     setIsSubmitting(true)
 
@@ -142,7 +144,7 @@ export function JobsTable() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: formTitle,
-          company: formCompany,
+          company,
           salary: formSalary,
           type: formType,
           description: formDescription,
@@ -361,11 +363,11 @@ export function JobsTable() {
                 />
               </div>
               <div>
-                <label className="text-sm text-muted-foreground mb-2 block">Company</label>
+                <label className="text-sm text-muted-foreground mb-2 block">Company (optional)</label>
                 <Input
                   value={formCompany}
                   onChange={(e) => setFormCompany(e.target.value)}
-                  placeholder="Acme Inc."
+                  placeholder="Leave blank for Confidential"
                   className="bg-secondary border-border"
                 />
               </div>

@@ -43,20 +43,24 @@ export function Hero() {
 
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-          <Button
-            size="lg"
-            className="bg-gold text-[#0A0A0A] hover:bg-gold/90 font-semibold px-8 h-12"
-          >
-            Browse Jobs
-            <ArrowRight size={16} className="ml-2" />
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="border-border text-foreground hover:border-gold/50 hover:text-gold h-12 px-8"
-          >
-            Hire a VA
-          </Button>
+          <Link href="/jobs" className="w-full sm:w-auto">
+            <Button
+              size="lg"
+              className="w-full bg-gold text-[#0A0A0A] hover:bg-gold/90 font-semibold px-8 h-12"
+            >
+              Browse Jobs
+              <ArrowRight size={16} className="ml-2" />
+            </Button>
+          </Link>
+          <Link href="/for-companies" className="w-full sm:w-auto">
+            <Button
+              size="lg"
+              variant="outline"
+              className="w-full border-border text-foreground hover:border-gold/50 hover:text-gold h-12 px-8"
+            >
+              Hire a VA
+            </Button>
+          </Link>
         </div>
 
         {/* Stats */}

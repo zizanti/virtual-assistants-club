@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { toast } from 'sonner'
 import type { Job } from '@/lib/data'
 import { cn } from '@/lib/utils'
 
@@ -35,14 +36,30 @@ export function JobCard({ job }: { job: Job }) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [cvLink, setCvLink] = useState('')
+  const [englishLevel, setEnglishLevel] = useState('')
+  const [experience, setExperience] = useState('')
 
   const handleApply = () => {
-    // For now, just log the application
-    console.log('Application submitted:', { name, email, cvLink, jobId: job.id })
+    if (!name.trim() || !email.trim() || !cvLink.trim() || !englishLevel || !experience) {
+      toast.error('Please complete all required fields')
+      return
+    }
+
+    console.log('Application submitted:', {
+      name,
+      email,
+      cvLink,
+      englishLevel,
+      experience,
+      jobId: job.id,
+    })
+    toast.success('Application submitted')
     setIsApplyOpen(false)
     setName('')
     setEmail('')
     setCvLink('')
+    setEnglishLevel('')
+    setExperience('')
   }
 
   return (
@@ -149,6 +166,34 @@ export function JobCard({ job }: { job: Job }) {
                 />
               </div>
               <div>
+                <Label htmlFor="english-level">English Level</Label>
+                <select
+                  id="english-level"
+                  value={englishLevel}
+                  onChange={(e) => setEnglishLevel(e.target.value)}
+                  className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm text-foreground outline-none"
+                >
+                  <option value="">Select level</option>
+                  <option value="B1">B1</option>
+                  <option value="B2">B2</option>
+                  <option value="C1">C1</option>
+                </select>
+              </div>
+              <div>
+                <Label htmlFor="experience">Years of Experience</Label>
+                <select
+                  id="experience"
+                  value={experience}
+                  onChange={(e) => setExperience(e.target.value)}
+                  className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm text-foreground outline-none"
+                >
+                  <option value="">Select experience</option>
+                  <option value="0–1 years">0–1 years</option>
+                  <option value="1–3 years">1–3 years</option>
+                  <option value="3+ years">3+ years</option>
+                </select>
+              </div>
+              <div>
                 <Label htmlFor="cv">CV Link (Google Drive)</Label>
                 <Input
                   id="cv"
@@ -160,6 +205,9 @@ export function JobCard({ job }: { job: Job }) {
               <Button onClick={handleApply} className="w-full bg-gold text-[#0A0A0A] hover:bg-gold/90">
                 Submit Application
               </Button>
+              <p className="text-xs text-muted-foreground/70">
+                Applications submitted through VAC may be considered for multiple opportunities, not just this role.
+              </p>
             </div>
           </DialogContent>
         </Dialog>

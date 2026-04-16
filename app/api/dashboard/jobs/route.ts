@@ -17,9 +17,10 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const { title, company, salary, type, description } = await request.json()
+    const { title, company: submittedCompany, salary, type, description } = await request.json()
+    const company = submittedCompany?.trim() ? submittedCompany.trim() : 'Confidential'
 
-    if (!title || !company || !salary || !type || !description) {
+    if (!title || !salary || !type || !description) {
       return NextResponse.json(
         { error: 'All fields are required' },
         { status: 400 }
