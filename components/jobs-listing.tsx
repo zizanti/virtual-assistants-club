@@ -177,5 +177,4 @@ export function JobsListing({ jobs }: { jobs: Job[] }) {
       )}
     </div>
   )
-  )
 }
