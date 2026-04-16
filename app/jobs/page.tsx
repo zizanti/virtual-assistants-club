@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase'
 import { JobsListing } from '@/components/jobs-listing'
+import { PublicNav } from '@/components/public-nav'
 import type { Job } from '@/lib/data'
 
 function getInitials(company?: string) {
@@ -74,5 +75,10 @@ export default async function JobsPage() {
     console.error('Unable to load jobs:', error)
   }
 
-  return <JobsListing jobs={jobs} />
+  return (
+    <div className="min-h-screen bg-background">
+      <PublicNav />
+      <JobsListing jobs={jobs} />
+    </div>
+  )
 }

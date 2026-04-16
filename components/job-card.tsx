@@ -1,8 +1,12 @@
 'use client'
 
+import { useState } from 'react'
 import { MapPin, Clock, Star, ArrowUpRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import type { Job } from '@/lib/data'
 import { cn } from '@/lib/utils'
 
@@ -27,6 +31,20 @@ function CompanyLogo({
 }
 
 export function JobCard({ job }: { job: Job }) {
+  const [isApplyOpen, setIsApplyOpen] = useState(false)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [cvLink, setCvLink] = useState('')
+
+  const handleApply = () => {
+    // For now, just log the application
+    console.log('Application submitted:', { name, email, cvLink, jobId: job.id })
+    setIsApplyOpen(false)
+    setName('')
+    setEmail('')
+    setCvLink('')
+  }
+
   return (
     <article
       className={cn(
@@ -96,13 +114,55 @@ export function JobCard({ job }: { job: Job }) {
             {job.daysAgo}d ago
           </span>
         </div>
-        <Button
-          size="sm"
-          className="h-8 px-3.5 text-xs bg-gold text-[#0A0A0A] hover:bg-gold/90 font-semibold rounded-lg"
-        >
-          Apply
-          <ArrowUpRight size={12} className="ml-1" />
-        </Button>
+        <Dialog open={isApplyOpen} onOpenChange={setIsApplyOpen}>
+          <DialogTrigger asChild>
+            <Button
+              size="sm"
+              className="h-8 px-3.5 text-xs bg-gold text-[#0A0A0A] hover:bg-gold/90 font-semibold rounded-lg"
+            >
+              Apply
+              <ArrowUpRight size={12} className="ml-1" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Apply for {job.title}</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Your full name"
+                />
+              </div>
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your.email@example.com"
+                />
+              </div>
+              <div>
+                <Label htmlFor="cv">CV Link (Google Drive)</Label>
+                <Input
+                  id="cv"
+                  value={cvLink}
+                  onChange={(e) => setCvLink(e.target.value)}
+                  placeholder="https://drive.google.com/..."
+                />
+              </div>
+              <Button onClick={handleApply} className="w-full bg-gold text-[#0A0A0A] hover:bg-gold/90">
+                Submit Application
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </article>
   )

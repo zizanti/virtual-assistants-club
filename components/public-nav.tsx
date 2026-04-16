@@ -22,13 +22,18 @@ export function PublicNav() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6">
-            {['Jobs', 'For Companies', 'Community', 'About'].map((item) => (
+            {[
+              { name: 'Jobs', href: '/jobs' },
+              { name: 'For Companies', href: '/for-companies' },
+              { name: 'Community', href: '/community' },
+              { name: 'About', href: '/about' }
+            ].map((item) => (
               <Link
-                key={item}
-                href="#"
+                key={item.name}
+                href={item.href}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                {item}
+                {item.name}
               </Link>
             ))}
             <Link
@@ -70,14 +75,19 @@ export function PublicNav() {
         {open && (
           <div className="md:hidden py-4 border-t border-border">
             <nav className="flex flex-col gap-3">
-              {['Jobs', 'For Companies', 'Community', 'About'].map((item) => (
+              {[
+                { name: 'Jobs', href: '/jobs' },
+                { name: 'For Companies', href: '/for-companies' },
+                { name: 'Community', href: '/community' },
+                { name: 'About', href: '/about' }
+              ].map((item) => (
                 <Link
-                  key={item}
-                  href="#"
+                  key={item.name}
+                  href={item.href}
                   className="text-sm text-muted-foreground hover:text-foreground px-1"
                   onClick={() => setOpen(false)}
                 >
-                  {item}
+                  {item.name}
                 </Link>
               ))}
               <Link

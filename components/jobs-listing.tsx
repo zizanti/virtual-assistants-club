@@ -14,7 +14,7 @@ const SALARY_OPTIONS = [
   '$6k+/mo',
 ]
 
-const TYPE_OPTIONS = ['All Types', 'Full-time', 'Part-time', 'Contract']
+const TYPE_OPTIONS = ['All Types', 'VA', 'EA', 'Other']
 
 function parseSalaryNumber(job: Job) {
   if (job.salaryMin && job.salaryMax) {
@@ -77,7 +77,9 @@ export function JobsListing({ jobs }: { jobs: Job[] }) {
 
       const matchesType =
         typeFilter === 'All Types' ||
-        job.type.toLowerCase() === typeFilter.toLowerCase()
+        (typeFilter === 'VA' && job.title.toLowerCase().includes('virtual assistant')) ||
+        (typeFilter === 'EA' && job.title.toLowerCase().includes('executive assistant')) ||
+        (typeFilter === 'Other' && !job.title.toLowerCase().includes('virtual assistant') && !job.title.toLowerCase().includes('executive assistant'))
 
       const matchesSalary = jobMatchesSalary(job, salaryFilter)
 
@@ -86,17 +88,16 @@ export function JobsListing({ jobs }: { jobs: Job[] }) {
   }, [jobs, search, salaryFilter, typeFilter])
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
-        <div className="mb-10 rounded-[32px] border border-border bg-card p-8 shadow-xl shadow-black/10">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+      <div className="mb-10 rounded-[32px] border border-border bg-card p-8 shadow-xl shadow-black/10">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-2xl">
               <p className="text-sm uppercase tracking-[0.3em] text-gold">Job Listings</p>
               <h1 className="mt-3 text-3xl font-semibold text-foreground sm:text-4xl">
-                Browse premium remote roles
+                Remote Jobs for Virtual Assistants & Executive Assistants
               </h1>
               <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                Explore the latest openings from our network. Filter by title, company, salary, and job type without signing in.
+                Curated roles from companies hiring in LATAM. Updated consistently.
               </p>
             </div>
 
