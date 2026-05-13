@@ -2,7 +2,9 @@
 
 import { useState } from 'react'
 import { PublicNav } from '@/components/public-nav'
-import { CheckCircle2, ArrowRight, Star, Zap, Shield, Crown, FileText, Video, MessageSquare, TrendingUp, DollarSign, MapPin } from 'lucide-react'
+import { CheckCircle2, ArrowRight, Star, Zap, Shield, Crown, FileText, Video, MessageSquare, TrendingUp, DollarSign, MapPin, Download } from 'lucide-react'
+
+const WOMPI_GUIDE_LINK = 'https://checkout.wompi.co/l/Nf2FLc'
 
 const HIGHLIGHTS = [
   {
@@ -48,39 +50,8 @@ const HIGHLIGHTS = [
 ]
 
 export default function GuiaPremiumPage() {
-  const [email, setEmail] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-
-  const handleCheckout = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email.trim()) return
-    setLoading(true)
-    setError('')
-
-    try {
-      const res = await fetch('/api/wompi/create-transaction', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          product: 'guide',
-          amount_in_cents: 1800000,
-          currency: 'COP',
-        }),
-      })
-
-      const data = await res.json()
-      if (res.ok && data.redirectUrl) {
-        window.location.href = data.redirectUrl
-      } else {
-        setError(data.error || 'Error al procesar el pago')
-      }
-    } catch {
-      setError('Error de conexión')
-    } finally {
-      setLoading(false)
-    }
+  const handleCheckout = () => {
+    window.location.href = WOMPI_GUIDE_LINK
   }
 
   return (
@@ -137,36 +108,21 @@ export default function GuiaPremiumPage() {
           </p>
         </div>
 
-        {/* Checkout form */}
+        {/* Checkout */}
         <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
           <h2 className="font-semibold text-foreground text-sm mb-1 text-center">Comprar Guía Premium</h2>
           <p className="text-xs text-muted-foreground text-center mb-5">Pago seguro con Wompi. Acceso inmediato.</p>
-          <form onSubmit={handleCheckout} className="space-y-3 max-w-sm mx-auto">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="tu@email.com"
-              required
-              className="w-full h-11 px-4 rounded-xl border border-border bg-secondary text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-gold/50 transition-all"
-              disabled={loading}
-            />
-            {error && <p className="text-xs text-red-400 text-center">{error}</p>}
+          <div className="max-w-sm mx-auto space-y-3">
             <button
-              type="submit"
-              disabled={loading}
-              className="w-full h-11 bg-gold text-[#0A0A0A] hover:bg-gold/90 hover:scale-[1.01] active:scale-[0.99] font-semibold rounded-xl transition-all duration-200 text-sm disabled:opacity-50 flex items-center justify-center gap-2"
+              onClick={handleCheckout}
+              className="w-full h-11 bg-gold text-[#0A0A0A] hover:bg-gold/90 hover:scale-[1.01] active:scale-[0.99] font-semibold rounded-xl transition-all duration-200 text-sm flex items-center justify-center gap-2"
             >
-              {loading ? 'Procesando...' : (
-                <>
-                  Comprar Guía — $18,000 <ArrowRight size={14} />
-                </>
-              )}
+              Comprar Guía — $18,000 <ArrowRight size={14} />
             </button>
             <p className="text-[10px] text-muted-foreground text-center">
               Pago 100% seguro · Acceso inmediato post-pago
             </p>
-          </form>
+          </div>
         </div>
       </div>
     </div>

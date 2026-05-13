@@ -9,8 +9,8 @@ import { ArrowRight, Loader2 } from 'lucide-react'
 const PRODUCTS: Record<string, { title: string; price: string; amount: number }> = {
   coaching: {
     title: 'Sesión de Coaching Personalizado',
-    price: '$105,000 COP',
-    amount: 10500000,
+    price: '$95,000 COP',
+    amount: 9500000,
   },
   guide: {
     title: 'Guía Completa: Trabajo Remoto en USA',

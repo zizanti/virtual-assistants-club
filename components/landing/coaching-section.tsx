@@ -45,7 +45,7 @@ export function CoachingSection() {
           <div className="rounded-2xl border border-gold/30 bg-card bg-gradient-to-b from-gold/5 to-transparent p-8 text-center gold-border-glow">
             <p className="text-xs uppercase tracking-[0.3em] text-gold mb-3">1 Sesión de Coaching</p>
             <div className="mb-4">
-              <span className="text-4xl font-bold text-foreground">$105,000</span>
+              <span className="text-4xl font-bold text-foreground">$95,000</span>
               <span className="text-sm text-muted-foreground ml-1">COP</span>
             </div>
             <ul className="space-y-2 mb-6 text-left">
