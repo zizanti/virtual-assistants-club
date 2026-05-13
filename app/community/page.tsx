@@ -120,7 +120,7 @@ export default function CommunityPage() {
           {/* CTA */}
           <div className="text-center">
             <button
-              onClick={() => window.open('https://skool.com/vac', '_blank')}
+              onClick={() => window.open('https://www.skool.com/virtual-assistants-latam-2741/about', '_blank')}
               className="inline-flex items-center gap-2 h-11 px-7 bg-gold text-[#0A0A0A] hover:bg-gold/90 hover:scale-[1.02] active:scale-[0.98] font-semibold rounded-xl transition-all duration-200"
             >
               Únete a la Comunidad <ArrowRight size={15} />
