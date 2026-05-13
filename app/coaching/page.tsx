@@ -1,9 +1,9 @@
 'use client'
 
 import { PublicNav } from '@/components/public-nav'
-import { CheckCircle2, ArrowRight, Crown, Target, Wrench, Map, FileText, Lightbulb, Clock, Video, Mail } from 'lucide-react'
+import { CheckCircle2, ArrowRight, Crown, Target, Wrench, Map, FileText, Lightbulb, Clock, Video, Mail, Flame } from 'lucide-react'
 
-const WOMPI_COACHING_LINK = 'https://checkout.wompi.co/l/YmivSy'
+const WOMPI_COACHING_LINK = 'https://checkout.wompi.co/l/VVJ6yF'
 
 const STEPS = [
   {
@@ -51,9 +51,10 @@ export default function CoachingPage() {
       <div className="mx-auto max-w-3xl px-4 sm:px-6 py-12 md:py-16">
         {/* Header */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/5 px-3 py-1 text-xs font-semibold text-gold mb-4">
-            <Crown size={12} />
-            Mentoria 1:1 con Zizanti
+          {/* HOT DEAL Badge */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-orange bg-orange/20 px-4 py-1.5 text-xs font-bold text-orange mb-4">
+            <Flame size={14} />
+            HOT DEAL — Precio de Lanzamiento
           </div>
           <h1 className="font-serif text-3xl md:text-4xl font-bold text-foreground text-balance mb-3">
             Deja de sonar a Call Center y proyecta un perfil EA High-Ticket
@@ -63,10 +64,14 @@ export default function CoachingPage() {
           </p>
         </div>
 
-        {/* Price */}
-        <div className="flex items-center justify-center gap-3 mb-10">
-          <span className="text-3xl font-bold text-gold">$95,000 COP</span>
-          <span className="text-xs text-muted-foreground">Sesión de 45 minutos · Google Meet</span>
+        {/* Price with discount */}
+        <div className="text-center mb-10">
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <span className="text-lg text-muted-foreground line-through decoration-red-500">$169,000 COP</span>
+            <span className="text-4xl font-bold text-gold">$100,000 COP</span>
+          </div>
+          <p className="text-xs text-orange font-semibold">Ahorra $69,000 — Solo por tiempo limitado</p>
+          <p className="text-xs text-muted-foreground mt-1">Sesión de 45 minutos · Google Meet</p>
         </div>
 
         {/* What we do */}
@@ -122,8 +127,14 @@ export default function CoachingPage() {
               onClick={handleCheckout}
               className="w-full h-11 bg-gold text-[#0A0A0A] hover:bg-gold/90 hover:scale-[1.01] active:scale-[0.99] font-semibold rounded-xl transition-all duration-200 text-sm flex items-center justify-center gap-2"
             >
-              Pagar y Reservar — $95,000 <ArrowRight size={14} />
+              Pagar y Reservar — $100,000 <ArrowRight size={14} />
             </button>
+            {/* Warning about not closing Wompi */}
+            <div className="rounded-lg border border-orange/30 bg-orange/10 p-3">
+              <p className="text-xs text-orange font-medium text-center">
+                No cierres Wompi después de pagar — serás redirigido automáticamente para agendar tu sesión
+              </p>
+            </div>
             <p className="text-[10px] text-muted-foreground text-center">
               Pago 100% seguro con Wompi
             </p>

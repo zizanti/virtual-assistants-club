@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { PublicNav } from '@/components/public-nav'
 import { CheckCircle2, ArrowRight, Star, Zap, Shield, Crown, FileText, Video, MessageSquare, TrendingUp, DollarSign, MapPin, Download } from 'lucide-react'
 
-const WOMPI_GUIDE_LINK = 'https://checkout.wompi.co/l/Nf2FLc'
+const WOMPI_GUIDE_LINK = 'https://checkout.wompi.co/l/3hp9mm'
 
 const HIGHLIGHTS = [
   {
@@ -74,7 +74,7 @@ export default function GuiaPremiumPage() {
 
         {/* Price tag */}
         <div className="flex items-center justify-center gap-3 mb-10">
-          <span className="text-3xl font-bold text-gold">$18,000 COP</span>
+          <span className="text-3xl font-bold text-gold">$39,000 COP</span>
           <span className="text-xs text-muted-foreground">Menos que un tinto. Más valor que un curso de $500K.</span>
         </div>
 
@@ -117,7 +117,7 @@ export default function GuiaPremiumPage() {
               onClick={handleCheckout}
               className="w-full h-11 bg-gold text-[#0A0A0A] hover:bg-gold/90 hover:scale-[1.01] active:scale-[0.99] font-semibold rounded-xl transition-all duration-200 text-sm flex items-center justify-center gap-2"
             >
-              Comprar Guía — $18,000 <ArrowRight size={14} />
+              Comprar Guía — $39,000 <ArrowRight size={14} />
             </button>
             <p className="text-[10px] text-muted-foreground text-center">
               Pago 100% seguro · Acceso inmediato post-pago
