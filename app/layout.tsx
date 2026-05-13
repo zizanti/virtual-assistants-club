@@ -20,6 +20,11 @@ export const metadata: Metadata = {
   description: 'Connect elite executive assistants with top companies across Latin America. Browse curated remote opportunities and hire vetted VA talent.',
   generator: 'v0.app',
   keywords: ['virtual assistant', 'executive assistant', 'LATAM', 'remote jobs', 'EA network'],
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/apple-icon.png',
+  },
   openGraph: {
     title: 'Virtual Assistants Club',
     description: 'The #1 Executive Assistant Talent Network in LATAM',
