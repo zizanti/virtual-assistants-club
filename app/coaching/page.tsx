@@ -23,18 +23,20 @@ const STEPS = [
   },
   {
     icon: FileText,
-    title: 'El Entregable',
-    desc: 'Al terminar te mando un documento con el paso a paso exacto, más 5 anexos: templates, CV y páginas para aplicar.',
+    title: 'Los Descargables',
+    desc: 'Más de 20 plataformas para aplicar como VA/EA, 10 templates adicionales de outreach para llegar a nuevos clientes, CVs optimizados y guiones de entrevista.',
   },
 ]
 
 const BONUSES = [
-  '20+ plataformas para aplicar (directorios actualizados)',
-  '10 templates de outreach para nuevos clientes',
-  'Templates de CV optimizados',
-  'Guiones de entrevista',
+  '20+ plataformas para aplicar como VA/EA (directorios actualizados)',
+  '10 templates de outreach para llegar a nuevos clientes',
+  'Templates de CV optimizados en inglés',
+  'Guiones de entrevista en inglés',
   'Plantillas de comunicación profesional',
   'Roadmap personalizado de 30 días',
+  'Guía de negociación salarial',
+  'Checklist de preparación para entrevistas',
 ]
 
 export default function CoachingPage() {
@@ -90,7 +92,7 @@ export default function CoachingPage() {
 
         {/* Bonuses */}
         <div className="rounded-xl border border-border bg-secondary/30 p-5 mb-8">
-          <p className="text-xs text-gold font-semibold mb-3">INCLUYE +30 ANEXOS</p>
+          <p className="text-xs text-gold font-semibold mb-3">DESCARGABLES INCLUIDOS</p>
           <div className="grid sm:grid-cols-2 gap-2">
             {BONUSES.map((b, i) => (
               <div key={i} className="flex items-center gap-2">
