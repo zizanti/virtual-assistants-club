@@ -53,15 +53,16 @@ export function DashboardTopBar() {
 
       {/* Actions */}
       <div className="flex items-center gap-3">
-        <Link href="/dashboard/jobs">
-          <Button size="sm" className="h-9 gap-1.5 bg-[#E8650A] hover:bg-[#E8650A]/90 text-white font-semibold rounded-xl">
-            <Plus size={15} />
-            Add Job
-          </Button>
+        <Link
+          href="/dashboard/jobs"
+          className="inline-flex items-center gap-1.5 h-9 px-3 rounded-xl bg-[#E8650A] hover:bg-[#E8650A]/90 hover:scale-[1.02] active:scale-[0.98] text-white text-sm font-semibold transition-all duration-200"
+        >
+          <Plus size={15} />
+          Add Job
         </Link>
 
         {/* Notifications */}
-        <button className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground hover:text-foreground hover:border-gold/30 transition-colors">
+        <button className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground hover:text-foreground hover:border-gold/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
           <Bell size={16} />
           <span className="absolute -top-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-[#E8650A] text-[9px] font-bold text-white flex items-center justify-center">
             3
@@ -76,7 +77,7 @@ export function DashboardTopBar() {
                 S
               </div>
               <div className="hidden md:block">
-                <p className="text-xs font-medium text-foreground leading-tight">Santi</p>
+                <p className="text-xs font-medium text-foreground leading-tight">David</p>
                 <p className="text-[10px] text-muted-foreground leading-tight">Admin</p>
               </div>
             </button>
@@ -94,11 +95,11 @@ export function DashboardTopBar() {
         </DropdownMenu>
 
         {/* View Site */}
-        <Link href="/">
-          <Button size="sm" variant="ghost" className="h-9 text-muted-foreground hover:text-foreground text-xs gap-1">
-            <ExternalLink size={13} />
-            <span className="hidden md:inline">View Site</span>
-          </Button>
+        <Link href="/"
+          className="inline-flex items-center gap-1 h-9 px-3 text-muted-foreground hover:text-foreground hover:scale-[1.02] active:scale-[0.98] text-xs transition-all duration-200"
+        >
+          <ExternalLink size={13} />
+          <span className="hidden md:inline">View Site</span>
         </Link>
       </div>
     </header>

@@ -24,7 +24,7 @@ export default function DashboardPage() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="font-serif text-2xl font-bold text-foreground">
-            Welcome back, Santi 👋
+            Welcome back, David 👋
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
             Here&apos;s what&apos;s happening across your VA network today.
@@ -60,15 +60,13 @@ export default function DashboardPage() {
             )}
           </div>
 
-          <Button
-            size="sm"
-            variant="outline"
-            className="h-9 border-border text-muted-foreground hover:text-foreground hover:border-gold/30 text-xs gap-1.5"
+          <button
             onClick={() => toast.success('Report exported successfully')}
+            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:border-gold/30 hover:scale-[1.02] active:scale-[0.98] text-xs transition-all duration-200"
           >
             <Download size={13} />
             Export
-          </Button>
+          </button>
         </div>
       </div>
 

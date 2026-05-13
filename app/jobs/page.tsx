@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase'
-import { JobsListing } from '@/components/jobs-listing'
 import { PublicNav } from '@/components/public-nav'
+import { JobsListing } from '@/components/jobs-listing'
+import { JobAlertSignup } from '@/components/job-alert-signup'
 import type { Job } from '@/lib/data'
 
 function getInitials(company?: string) {
@@ -35,12 +36,12 @@ function daysAgoFromDate(value: unknown) {
 
 function normalizeJob(row: any, index: number): Job {
   const title = row.title ?? row.job_title ?? 'Untitled role'
-  const company = row.company ?? row.company_name ?? 'Unknown company'
+  const company = (row.company?.trim() && row.company.trim() !== '') ? row.company.trim() : row.company_name?.trim() || 'Unknown company'
   const salary = row.salary ?? row.salary_range ?? '$0/mo'
   const type = row.type ?? row.job_type ?? 'Full-time'
   const companyInitials = row.companyInitials ?? row.company_initials ?? getInitials(company)
   const companyColor = row.companyColor ?? row.company_color ?? getCompanyColor(company)
-  const skills = Array.isArray(row.skills) ? row.skills : row.skills?.split?.(',')?.map((item: string) => item.trim()) ?? []
+  const skills = Array.isArray(row.skills) ? row.skills : row.skills?.split?.(',').map((item: string) => item.trim()) ?? []
   const postedDate = row.postedDate ?? row.posted_date ?? row.created_at ?? ''
   const daysAgo = row.daysAgo ?? row.days_ago ?? daysAgoFromDate(postedDate)
 
@@ -79,6 +80,9 @@ export default async function JobsPage() {
     <div className="min-h-screen bg-background">
       <PublicNav />
       <JobsListing jobs={jobs} />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-12">
+        <JobAlertSignup />
+      </div>
     </div>
   )
 }

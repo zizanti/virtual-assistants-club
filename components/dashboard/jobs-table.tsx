@@ -109,10 +109,13 @@ export function JobsTable() {
     try {
       const response = await fetch(`/api/dashboard/jobs/${deleteJob.id}`, {
         method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
       })
 
+      const result = await response.json()
+
       if (!response.ok) {
-        throw new Error('Delete failed')
+        throw new Error(result.error || 'Delete failed')
       }
 
       setJobs((prev) => prev.filter((j) => j.id !== deleteJob.id))
@@ -120,9 +123,9 @@ export function JobsTable() {
         description: 'The job listing has been permanently removed.',
       })
       setDeleteJob(null)
-    } catch (error) {
-      console.error(error)
-      toast.error('Failed to delete job')
+    } catch (error: any) {
+      console.error('Delete error:', error)
+      toast.error(error?.message || 'Failed to delete job')
     }
   }
 
@@ -215,14 +218,13 @@ export function JobsTable() {
               <h2 className="font-serif text-lg font-bold text-foreground">Job Listings</h2>
               <p className="text-xs text-muted-foreground mt-0.5">{filtered.length} of {jobs.length} listings shown</p>
             </div>
-            <Button
-              size="sm"
-              className="h-9 gap-1.5 bg-[#E8650A] hover:bg-[#E8650A]/90 text-white font-semibold rounded-xl flex-shrink-0"
+            <button
+              className="inline-flex items-center gap-1.5 h-9 px-3 bg-[#E8650A] hover:bg-[#E8650A]/90 hover:scale-[1.02] active:scale-[0.98] text-white font-semibold rounded-xl flex-shrink-0 transition-all duration-200"
               onClick={() => setCreateOpen(true)}
             >
               <Plus size={14} />
               New Listing
-            </Button>
+            </button>
           </div>
 
           {/* Search */}
@@ -410,12 +412,19 @@ export function JobsTable() {
             </div>
 
             <DialogFooter className="items-center gap-2">
-              <Button variant="outline" size="sm" className="border-border rounded-xl" onClick={() => setCreateOpen(false)}>
+              <button
+                className="inline-flex items-center justify-center h-8 px-4 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:scale-[1.02] active:scale-[0.98] text-sm transition-all duration-200"
+                onClick={() => setCreateOpen(false)}
+              >
                 Cancel
-              </Button>
-              <Button type="submit" size="sm" className="bg-[#E8650A] hover:bg-[#E8650A]/90 text-white font-semibold rounded-xl" disabled={isSubmitting}>
+              </button>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="inline-flex items-center justify-center h-8 px-4 bg-[#E8650A] hover:bg-[#E8650A]/90 disabled:opacity-50 hover:scale-[1.02] active:scale-[0.98] text-white font-semibold rounded-xl transition-all duration-200"
+              >
                 {isSubmitting ? 'Creating…' : 'Create Job'}
-              </Button>
+              </button>
             </DialogFooter>
           </form>
         </DialogContent>
@@ -439,13 +448,19 @@ export function JobsTable() {
             </div>
           )}
           <DialogFooter className="gap-2">
-            <Button variant="outline" size="sm" className="border-border rounded-xl" onClick={() => setDeleteJob(null)}>
+            <button
+              className="inline-flex items-center justify-center h-8 px-4 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:scale-[1.02] active:scale-[0.98] text-sm transition-all duration-200"
+              onClick={() => setDeleteJob(null)}
+            >
               Cancel
-            </Button>
-            <Button size="sm" className="bg-destructive hover:bg-destructive/90 text-white font-semibold rounded-xl" onClick={handleDelete}>
+            </button>
+            <button
+              className="inline-flex items-center justify-center h-8 px-4 bg-destructive hover:bg-destructive/90 hover:scale-[1.02] active:scale-[0.98] text-white font-semibold rounded-xl transition-all duration-200"
+              onClick={handleDelete}
+            >
               <Trash2 size={13} className="mr-1.5" />
               Delete Listing
-            </Button>
+            </button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -454,13 +469,10 @@ export function JobsTable() {
       <Dialog open={!!viewJob} onOpenChange={() => setViewJob(null)}>
         <DialogContent className="bg-card border-border text-foreground max-w-lg">
           <DialogHeader>
-            <div className="flex items-center gap-3 mb-1">
-              <div
-                className="flex h-10 w-10 items-center justify-center rounded-xl text-xs font-bold text-white flex-shrink-0"
-                style={{ backgroundColor: viewJob?.companyColor ?? '#D4A843' }}
-              >
-                {viewJob?.companyInitials}
-              </div>
+          <div className="flex items-center gap-3 mb-1">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold/10 flex-shrink-0">
+              <Briefcase size={18} className="text-gold" />
+            </div>
               <div>
                 <DialogTitle className="font-serif text-base leading-tight">{viewJob?.title}</DialogTitle>
                 <p className="text-xs text-muted-foreground mt-0.5">{viewJob?.company}</p>
@@ -527,13 +539,18 @@ export function JobsTable() {
           )}
 
           <DialogFooter className="gap-2">
-            <Button variant="outline" size="sm" className="border-border rounded-xl" onClick={() => setViewJob(null)}>
+            <button
+              className="inline-flex items-center justify-center h-8 px-4 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:scale-[1.02] active:scale-[0.98] text-sm transition-all duration-200"
+              onClick={() => setViewJob(null)}
+            >
               Close
-            </Button>
-            <Button size="sm" className="bg-gold hover:bg-gold/90 text-[#0A0A0A] font-semibold rounded-xl">
+            </button>
+            <button
+              className="inline-flex items-center justify-center h-8 px-4 bg-gold hover:bg-gold/90 hover:scale-[1.02] active:scale-[0.98] text-[#0A0A0A] font-semibold rounded-xl transition-all duration-200"
+            >
               <Pencil size={13} className="mr-1.5" />
               Edit Listing
-            </Button>
+            </button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -543,7 +560,7 @@ export function JobsTable() {
 
 function normalizeJob(row: any, index: number): Job {
   const title = row.title ?? 'Untitled role'
-  const company = row.company ?? 'Unknown company'
+  const company = (row.company?.trim() && row.company !== 'Confidential') ? row.company : 'Confidential'
   const salary = row.salary ?? '$0/mo'
   const type = row.type ?? 'Full-time'
   const createdAt = row.created_at ?? row.createdAt ?? row.postedDate ?? new Date().toISOString()
@@ -672,11 +689,8 @@ function JobRow({
       {/* Title */}
       <td className="pl-5 pr-4 py-3.5">
         <div className="flex items-center gap-3">
-          <div
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-[11px] font-bold text-white flex-shrink-0"
-            style={{ backgroundColor: job.companyColor }}
-          >
-            {job.companyInitials}
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold/10 flex-shrink-0">
+            <Briefcase size={14} className="text-gold" />
           </div>
           <div className="min-w-0">
             <p className="text-sm font-medium text-foreground truncate max-w-[200px]">{job.title}</p>
@@ -815,10 +829,13 @@ function EmptyState({ search, tab }: { search: string; tab: Tab }) {
           : 'Create your first job listing to start receiving applications from LATAM talent.'}
       </p>
       {!search && (
-        <Button size="sm" className="mt-5 h-9 gap-1.5 bg-gold hover:bg-gold/90 text-[#0A0A0A] font-semibold rounded-xl">
+        <button
+          onClick={() => setCreateOpen(true)}
+          className="inline-flex items-center gap-1.5 mt-5 h-9 px-4 bg-gold hover:bg-gold/90 hover:scale-[1.02] active:scale-[0.98] text-[#0A0A0A] font-semibold rounded-xl transition-all duration-200"
+        >
           <Plus size={14} />
           Create First Listing
-        </Button>
+        </button>
       )}
     </div>
   )

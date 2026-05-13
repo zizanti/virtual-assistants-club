@@ -29,9 +29,9 @@ export function RecentApplicationsTable() {
           <h3 className="font-semibold text-foreground text-sm">Recent Applications</h3>
           <p className="text-xs text-muted-foreground mt-0.5">{candidates.length} applications this week</p>
         </div>
-        <Button variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground">
+        <button className="text-xs text-muted-foreground hover:text-foreground hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer px-2 py-1 rounded-md">
           View All
-        </Button>
+        </button>
       </div>
 
       <div className="rounded-2xl border border-border overflow-hidden">

@@ -83,9 +83,9 @@ export function FilterBar({ onSearch, onRoleType, onSalary, onSkill, onLocation 
           <FilterDropdown label="Skills" options={SKILLS} onChange={onSkill} />
           <FilterDropdown label="Location" options={LOCATIONS} onChange={onLocation} />
 
-          <Button size="sm" className="h-11 px-5 bg-gold text-[#0A0A0A] hover:bg-gold/90 font-semibold rounded-xl">
+          <button className="h-11 px-5 bg-gold text-[#0A0A0A] hover:bg-gold/90 hover:scale-[1.02] active:scale-[0.98] font-semibold rounded-xl transition-all duration-200">
             Search
-          </Button>
+          </button>
         </div>
       </div>
     </div>

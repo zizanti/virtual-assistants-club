@@ -118,13 +118,13 @@ export default function LoginPage() {
             )}
 
             {/* Submit Button */}
-            <Button
+            <button
               type="submit"
               disabled={loading}
-              className="w-full h-10 bg-[#E8650A] hover:bg-[#E8650A]/90 text-white font-semibold rounded-xl"
+              className="w-full h-10 px-4 bg-[#E8650A] hover:bg-[#E8650A]/90 hover:scale-[1.01] active:scale-[0.99] disabled:hover:scale-100 disabled:opacity-70 text-white font-semibold rounded-xl transition-all duration-200 disabled:cursor-not-allowed"
             >
               {loading ? 'Signing in...' : 'Sign in'}
-            </Button>
+            </button>
           </form>
 
           {/* Footer */}

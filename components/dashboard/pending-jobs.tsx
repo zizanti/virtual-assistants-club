@@ -119,13 +119,19 @@ export function PendingJobsCard() {
             </div>
           )}
           <DialogFooter className="gap-2">
-            <Button variant="outline" size="sm" className="border-border" onClick={() => setApproveJob(null)}>
+            <button
+              className="inline-flex items-center justify-center h-8 px-4 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:scale-[1.02] active:scale-[0.98] text-sm transition-all duration-200"
+              onClick={() => setApproveJob(null)}
+            >
               Cancel
-            </Button>
-            <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white font-semibold" onClick={handleApprove}>
+            </button>
+            <button
+              className="inline-flex items-center justify-center h-8 px-4 bg-green-600 hover:bg-green-700 hover:scale-[1.02] active:scale-[0.98] text-white font-semibold rounded-xl transition-all duration-200"
+              onClick={handleApprove}
+            >
               <Check size={14} className="mr-1.5" />
               Approve & Publish
-            </Button>
+            </button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -146,13 +152,19 @@ export function PendingJobsCard() {
             </div>
           )}
           <DialogFooter className="gap-2">
-            <Button variant="outline" size="sm" className="border-border" onClick={() => setRejectJob(null)}>
+            <button
+              className="inline-flex items-center justify-center h-8 px-4 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:scale-[1.02] active:scale-[0.98] text-sm transition-all duration-200"
+              onClick={() => setRejectJob(null)}
+            >
               Cancel
-            </Button>
-            <Button size="sm" className="bg-destructive hover:bg-destructive/90 text-white font-semibold" onClick={handleReject}>
+            </button>
+            <button
+              className="inline-flex items-center justify-center h-8 px-4 bg-destructive hover:bg-destructive/90 hover:scale-[1.02] active:scale-[0.98] text-white font-semibold rounded-xl transition-all duration-200"
+              onClick={handleReject}
+            >
               <X size={14} className="mr-1.5" />
               Reject
-            </Button>
+            </button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 
     if (!title || !salary || !type || !description) {
       return NextResponse.json(
-        { error: 'All fields are required' },
+        { error: 'Title, salary, type, and description are required' },
         { status: 400 }
       )
     }
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error('Jobs POST error:', error)
-      return NextResponse.json({ error: 'Unable to create job' }, { status: 500 })
+      return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
     return NextResponse.json({ job: data })

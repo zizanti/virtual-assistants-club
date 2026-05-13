@@ -59,11 +59,12 @@ export function FeaturedJobs() {
               Hand-picked opportunities at top US companies. Updated daily.
             </p>
           </div>
-          <Link href="#jobs">
-            <Button variant="outline" className="border-border text-muted-foreground hover:border-gold/40 hover:text-gold shrink-0">
-              View all jobs
-              <ArrowRight size={14} className="ml-2" />
-            </Button>
+          <Link
+            href="#jobs"
+            className="inline-flex items-center gap-2 h-9 px-4 rounded-md border border-border text-muted-foreground text-sm font-medium hover:border-gold/40 hover:text-gold hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer"
+          >
+            View all jobs
+            <ArrowRight size={14} />
           </Link>
         </div>
 
@@ -132,13 +133,12 @@ export function FeaturedJobs() {
               {/* Apply CTA */}
               <div className="flex items-center justify-between mt-auto pt-1 border-t border-border/40">
                 <span className="text-xs text-muted-foreground">{job.type} · {job.experience}</span>
-                <Button
-                  size="sm"
-                  className="h-8 px-4 text-xs bg-gold text-[#0A0A0A] hover:bg-gold/90 font-semibold rounded-lg"
+                <button
+                  className="flex items-center gap-1.5 h-8 px-4 text-xs bg-gold text-[#0A0A0A] hover:bg-gold/90 hover:scale-105 active:scale-95 font-semibold rounded-lg transition-all duration-200 cursor-pointer"
                 >
                   Apply Now
-                  <ArrowRight size={12} className="ml-1.5" />
-                </Button>
+                  <ArrowRight size={12} />
+                </button>
               </div>
             </article>
           ))}
