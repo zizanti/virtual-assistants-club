@@ -31,8 +31,15 @@ export async function POST(request: NextRequest) {
     // Handle other errors
     if (error) {
       console.error('Supabase error:', error)
+      // Check if table doesn't exist
+      if (error.message?.includes('does not exist') || error.code === '42P01') {
+        return NextResponse.json(
+          { success: false, message: 'Database table not configured. Contact admin.' },
+          { status: 500 }
+        )
+      }
       return NextResponse.json(
-        { success: false, message: 'Something went wrong' },
+        { success: false, message: `Error: ${error.message || error.code || 'Unknown'}` },
         { status: 500 }
       )
     }
