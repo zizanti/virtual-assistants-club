@@ -39,7 +39,11 @@ export default function GuiaGratisPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, source: 'guia-gratis-landing', consent }),
       })
-      if (res.ok) {
+      const data = await res.json()
+      if (res.ok && data.success !== false) {
+        setSuccess(true)
+      } else if (data.message === 'Email already subscribed') {
+        // If already subscribed, still show success to download the guide
         setSuccess(true)
       } else {
         setError('Error al procesar. Intenta de nuevo.')
