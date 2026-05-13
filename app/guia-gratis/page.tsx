@@ -37,7 +37,7 @@ export default function GuiaGratisPage() {
       const res = await fetch('/api/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, source: 'guia-gratis-landing', consent }),
+        body: JSON.stringify({ email }),
       })
       const data = await res.json()
       if (res.ok && data.success !== false) {
@@ -46,7 +46,7 @@ export default function GuiaGratisPage() {
         // If already subscribed, still show success to download the guide
         setSuccess(true)
       } else {
-        setError('Error al procesar. Intenta de nuevo.')
+        setError(data.error || data.message || 'Error al procesar. Intenta de nuevo.')
       }
     } catch {
       setError('Error de conexión')
