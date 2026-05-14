@@ -1,33 +1,191 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
-import { DashboardLayout } from '@/components/dashboard/layout'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
-import { 
-  Download, 
-  Users, 
-  Search, 
-  TrendingUp, 
-  Instagram, 
-  Smartphone,
-  Globe,
-  Mail,
-  ArrowRight
-} from 'lucide-react'
 
 interface Subscriber {
   id: string
   email: string
   first_name: string | null
   last_name: string | null
-  source: string
   platform: string | null
   date_added: string
   imported_from: string
+}
+
+export default function NewsletterPage() {
+  const [subscribers, setSubscribers] = useState<Subscriber[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
+
+  useEffect(() => {
+    fetchSubscribers()
+  }, [])
+
+  const fetchSubscribers = async () => {
+    try {
+      const response = await fetch('/api/newsletter/list')
+      const data = await response.json()
+      
+      if (data.success) {
+        setSubscribers(data.subscribers)
+      } else {
+        setError('Error cargando contactos: ' + (data.error || 'Unknown'))
+      }
+    } catch (err) {
+      setError('Error de conexión: ' + (err instanceof Error ? err.message : 'Unknown'))
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const exportCSV = () => {
+    const headers = ['email', 'first_name', 'last_name']
+    const csvContent = [
+      headers.join(','),
+      ...subscribers.map(s => 
+        [s.email, s.first_name || '', s.last_name || ''].join(',')
+      )
+    ].join('\n')
+
+    const blob = new Blob([csvContent], { type: 'text/csv' })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `vaclub-newsletter-${new Date().toISOString().split('T')[0]}.csv`
+    a.click()
+  }
+
+  const filtered = subscribers.filter(s => 
+    s.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    s.first_name?.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  const stats = {
+    total: subscribers.length,
+    beacons: subscribers.filter(s => s.imported_from === 'beacons').length,
+    vac: subscribers.filter(s => s.imported_from === 'website' || !s.imported_from).length,
+    instagram: subscribers.filter(s => s.platform === 'Instagram').length,
+    tiktok: subscribers.filter(s => s.platform === 'TikTok').length,
+  }
+
+  if (loading) return <div style={{ padding: 40, textAlign: 'center' }}>Cargando...</div>
+  if (error) return <div style={{ padding: 40, color: 'red' }}>{error}</div>
+
+  return (
+    <div style={{ maxWidth: 1200, margin: '0 auto', padding: 20, fontFamily: 'system-ui, sans-serif' }}>
+      <h1 style={{ fontSize: 28, marginBottom: 10 }}>📧 Newsletter Subscribers</h1>
+      <p style={{ color: '#666', marginBottom: 30 }}>
+        Total: <strong>{stats.total}</strong> suscriptores • {stats.beacons} de Beacons • {stats.vac} de VAC
+      </p>
+
+      {/* Stats */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 15, marginBottom: 30 }}>
+        <div style={{ padding: 20, background: '#f5f5f5', borderRadius: 8, textAlign: 'center' }}>
+          <div style={{ fontSize: 32, fontWeight: 'bold', color: '#D4AF37' }}>{stats.total}</div>
+          <div style={{ fontSize: 12, color: '#666', marginTop: 5 }}>TOTAL</div>
+        </div>
+        <div style={{ padding: 20, background: '#dbeafe', borderRadius: 8, textAlign: 'center' }}>
+          <div style={{ fontSize: 32, fontWeight: 'bold', color: '#1e40af' }}>{stats.beacons}</div>
+          <div style={{ fontSize: 12, color: '#1e40af', marginTop: 5 }}>BEACONS</div>
+        </div>
+        <div style={{ padding: 20, background: '#d1fae5', borderRadius: 8, textAlign: 'center' }}>
+          <div style={{ fontSize: 32, fontWeight: 'bold', color: '#065f46' }}>{stats.vac}</div>
+          <div style={{ fontSize: 12, color: '#065f46', marginTop: 5 }}>VAC WEB</div>
+        </div>
+        <div style={{ padding: 20, background: '#fce7f3', borderRadius: 8, textAlign: 'center' }}>
+          <div style={{ fontSize: 32, fontWeight: 'bold', color: '#be185d' }}>{stats.instagram}</div>
+          <div style={{ fontSize: 12, color: '#be185d', marginTop: 5 }}>INSTAGRAM</div>
+        </div>
+        <div style={{ padding: 20, background: '#cffafe', borderRadius: 8, textAlign: 'center' }}>
+          <div style={{ fontSize: 32, fontWeight: 'bold', color: '#0e7490' }}>{stats.tiktok}</div>
+          <div style={{ fontSize: 12, color: '#0e7490', marginTop: 5 }}>TIKTOK</div>
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div style={{ display: 'flex', gap: 10, marginBottom: 20, flexWrap: 'wrap' }}>
+        <input
+          type="text"
+          placeholder="Buscar email..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{ padding: '10px 15px', borderRadius: 6, border: '1px solid #ddd', flex: 1, minWidth: 200, fontSize: 14 }}
+        />
+        <button
+          onClick={exportCSV}
+          style={{ 
+            padding: '10px 20px', 
+            background: '#D4AF37', 
+            color: 'white', 
+            border: 'none', 
+            borderRadius: 6, 
+            cursor: 'pointer',
+            fontSize: 14,
+            fontWeight: 'bold'
+          }}
+        >
+          📥 Exportar CSV para Substack
+        </button>
+      </div>
+
+      {/* Instructions */}
+      <div style={{ background: '#fef3c7', padding: 15, borderRadius: 8, marginBottom: 20, border: '1px solid #fbbf24' }}>
+        <strong>📋 Pasos para Substack:</strong>
+        <ol style={{ margin: '10px 0', paddingLeft: 20 }}>
+          <li>Click en "Exportar CSV" arriba</li>
+          <li>Ve a Substack → Dashboard → Subscribers → Import</li>
+          <li>Sube el archivo CSV</li>
+          <li>Listo! Todos tus contactos estarán en Substack</li>
+        </ol>
+      </div>
+
+      {/* Table */}
+      <div style={{ overflowX: 'auto', background: 'white', borderRadius: 8, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
+          <thead>
+            <tr style={{ background: '#f9fafb', borderBottom: '2px solid #e5e7eb' }}>
+              <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>Email</th>
+              <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>Nombre</th>
+              <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>Plataforma</th>
+              <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>Origen</th>
+              <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600', color: '#374151' }}>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map((s) => (
+              <tr key={s.id} style={{ borderBottom: '1px solid #e5e7eb' }}>
+                <td style={{ padding: '12px' }}>{s.email}</td>
+                <td style={{ padding: '12px' }}>{s.first_name} {s.last_name}</td>
+                <td style={{ padding: '12px' }}>
+                  <span style={{ 
+                    color: s.platform === 'Instagram' ? '#be185d' : s.platform === 'TikTok' ? '#0e7490' : '#666'
+                  }}>
+                    {s.platform || 'Website'}
+                  </span>
+                </td>
+                <td style={{ padding: '12px' }}>
+                  <span style={{ 
+                    padding: '4px 10px', 
+                    borderRadius: 20, 
+                    fontSize: 11,
+                    fontWeight: 'bold',
+                    background: s.imported_from === 'beacons' ? '#dbeafe' : '#d1fae5',
+                    color: s.imported_from === 'beacons' ? '#1e40af' : '#065f46'
+                  }}>
+                    {s.imported_from === 'beacons' ? 'Beacons' : 'VAC'}
+                  </span>
+                </td>
+                <td style={{ padding: '12px', color: '#666' }}>
+                  {new Date(s.date_added).toLocaleDateString('es-CO')}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
 }
 
 export default function NewsletterAdminPage() {
